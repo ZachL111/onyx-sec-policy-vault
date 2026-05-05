@@ -1,0 +1,10 @@
+{
+  "name": "zachl111/onyx-sec-policy-vault",
+  "description": "Implement a PHP security tooling project for policy protocol validation, using framed sample traffic and bounds and ordering tests.",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Portfolio\\": "src/"
+    }
+  }
+}
