@@ -1,0 +1,73 @@
+{
+  "repo": "onyx-sec-policy-vault",
+  "language": "PHP",
+  "category": "Security tooling",
+  "goal": "Implement a PHP security tooling project for policy protocol validation, using framed sample traffic and bounds and ordering tests.",
+  "review_model": {
+    "terms": [
+      "trust boundary",
+      "claim drift",
+      "replay exposure",
+      "policy width"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "trust boundary",
+      "signal": 56,
+      "slack": 45,
+      "drag": 28,
+      "confidence": 62,
+      "score": 135,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "claim drift",
+      "signal": 45,
+      "slack": 23,
+      "drag": 18,
+      "confidence": 49,
+      "score": 108,
+      "lane": "watch"
+    },
+    {
+      "name": "edge",
+      "focus": "replay exposure",
+      "signal": 77,
+      "slack": 35,
+      "drag": 9,
+      "confidence": 46,
+      "score": 208,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "policy width",
+      "signal": 88,
+      "slack": 51,
+      "drag": 9,
+      "confidence": 57,
+      "score": 257,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "trust boundary",
+      "signal": 62,
+      "slack": 30,
+      "drag": 28,
+      "confidence": 48,
+      "score": 118,
+      "lane": "watch"
+    }
+  ]
+}
