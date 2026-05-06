@@ -1,0 +1,28 @@
+{
+  "repo": "onyx-sec-policy-vault",
+  "language": "PHP",
+  "category": "Security tooling",
+  "goal": "Implement a PHP security tooling project for policy protocol validation, using framed sample traffic and bounds and ordering tests.",
+  "weights": {
+    "signal": 4,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 2
+  },
+  "thresholds": {
+    "ship": 161,
+    "watch": 116
+  },
+  "properties": [
+    "raising signal cannot reduce score",
+    "raising drag cannot improve score",
+    "lane labels must match configured thresholds",
+    "golden fixture ids must remain unique"
+  ],
+  "fixture_files": [
+    "fixtures/golden/scoreboard.csv",
+    "fixtures/golden/lane-matrix.csv",
+    "fixtures/fuzz/mutations.csv",
+    "fixtures/fuzz/boundary-cases.jsonl"
+  ]
+}
