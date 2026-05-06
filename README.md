@@ -1,43 +1,68 @@
 # onyx-sec-policy-vault
 
-onyx-sec-policy-vault is a PHP project for security tooling. It focuses on this technical goal: Implement a PHP security tooling project for policy protocol validation, using framed sample traffic and bounds and ordering tests.
+`onyx-sec-policy-vault` treats security tooling as a local verification problem. The PHP implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
 
-## Why it exists
+## Onyx Sec Policy Vault Checkpoints
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
-
-## Features
-
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
 
 ## Architecture Notes
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 157, risk penalty 5, latency penalty 4, and weight bonus 3. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The PHP implementation uses strict types and a small namespaced policy class.
 
-## Setup
+## What This Is For
 
-Install the PHP toolchain and run commands from the repository root.
+This is not a wrapper around a service. It is a self-contained project that shows how the model behaves when demand, capacity, latency, risk, and weight move in different directions.
 
-## Usage
+## Useful Pieces
+
+- Uses fixture data to keep policy checks changes visible in code review.
+- Includes extended examples for replay guards, including `surge` and `degraded`.
+- Documents claim validation tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
+- Stores project constants and verification metadata in `metadata/project.json`.
+
+## Case Study
+
+`examples/extended_cases.csv` adds six named cases. I kept the names plain so failures are easy to read in a terminal: baseline, pressure, surge, degraded, recovery, and boundary.
+
+## Project Layout
+
+- `src`: primary implementation
+- `tests`: verification harness
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+
+## Tooling
+
+Install PHP and run the commands from the repository root. The project does not need credentials or a hosted service.
+
+## Local Workflow
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-The verification script builds or runs the project and checks the fixture decisions.
+This runs the language-level build or test path against the compact fixture set.
 
-## Tests
+## Quality Gate
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
 ```
 
-## Limitations And Roadmap
+The audit command checks repository structure and README constraints before it delegates to the verifier.
 
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+## Scope
+
+The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
+
+## Expansion Ideas
+
+- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
+- Add a short report command that prints the score breakdown for a single scenario.
+- Add malformed input fixtures so the failure path is as visible as the happy path.
+- Add one more security tooling fixture that focuses on a malformed or borderline input.
